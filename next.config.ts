@@ -8,15 +8,14 @@ const nextConfig = {
   basePath: isProd ? `/${repoName}` : "",
   assetPrefix: isProd ? `/${repoName}/` : "",
 
-  // 👇 ปิด image optimization (GitHub Pages ไม่รองรับ image loader)
+  trailingSlash: true, // ✅ สำคัญมาก! ป้องกัน 404 ของ _next/static
+
   images: {
-    unoptimized: true,
+    unoptimized: true, // GitHub Pages ไม่รองรับ Image Optimization
   },
 
-  // 👇 เปิด strict mode (แนะนำสำหรับ dev)
   reactStrictMode: true,
 
-  // 👇 optional: ใส่ env จาก .env ให้เข้าถึงใน client ได้
   env: {
     NEXT_PUBLIC_ACCESS_PASSWORD: process.env.NEXT_PUBLIC_ACCESS_PASSWORD,
   },
