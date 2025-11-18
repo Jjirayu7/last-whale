@@ -84,6 +84,7 @@ export default function Home() {
     );
 
   const goToNext = () => router.push("/next-356982");
+  const goToPrev = () => router.push("/music-356982");
 
   // 🪼 แมงกระพรุน
   const jellyfish = useMemo(() => {
@@ -202,14 +203,24 @@ export default function Home() {
       </div>
 
       {/* ปุ่มเปลี่ยนหน้า */}
-      <div className="absolute top-1/2 right-0 flex justify-end px-6 z-30">
-        <button
-          onClick={goToNext}
-          className="bg-white/40 hover:bg-white/70 text-sky-900 font-bold text-xl rounded-full w-10 h-10 flex items-center justify-center backdrop-blur-md shadow-md"
-        >
-          ›
-        </button>
-      </div>
+      <div className="absolute top-1/2 left-0 w-full flex justify-between px-6 z-30">
+      {/* ปุ่มก่อนหน้า */}
+      <button
+        onClick={goToPrev}
+        className="bg-white/40 hover:bg-white/70 text-sky-900 font-bold text-xl rounded-full w-10 h-10 flex items-center justify-center backdrop-blur-md shadow-md"
+      >
+        ‹
+      </button>
+
+      {/* ปุ่มถัดไป */}
+      <button
+        onClick={goToNext}
+        className="bg-white/40 hover:bg-white/70 text-sky-900 font-bold text-xl rounded-full w-10 h-10 flex items-center justify-center backdrop-blur-md shadow-md"
+      >
+        ›
+      </button>
+    </div>
+
 
       {/* Jellyfish */}
       {jellyfish.map((j) => (

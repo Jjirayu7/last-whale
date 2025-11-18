@@ -18,8 +18,7 @@ export default function Next2() {
     >
       <button
         onClick={() => router.push("/home")}
-        className="absolute top-6 left-6 bg-white/30 hover:bg-white/60 text-sky-900 font-bold text-lg rounded-full w-10 h-10 flex items-center justify-center backdrop-blur-md shadow-lg z-30"
-      >
+        className="absolute top-5 left-6 bg-white/30 hover:bg-white/60 text-sky-900 font-bold text-3xl rounded-2xl w-10 h-10 flex items-center justify-center backdrop-blur-md shadow-lg"      >
         ‹
       </button>
 
