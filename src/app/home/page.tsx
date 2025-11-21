@@ -220,6 +220,7 @@ export default function Home() {
         ›
       </button>
     </div>
+     
 
 
       {/* Jellyfish */}
@@ -256,6 +257,11 @@ export default function Home() {
           onClick={() => setMessage(j.type.includes("red") ? "❤️" : "💙")}
         />
       ))}
+      <div className="text-xs relative top-110">
+          พรุ่งนี้จะต้องใส่ชุดครุยแล้วสิ <br />
+          อยากให้เทออยู่ข้างๆในวันนี้จัง ทำไมถึงไม่มีใครเลยนะ <br />
+          แย่จังไม่มีใครเข้าใจเค้าเลย ไม่มีเลย ไม่มีจริๆ
+        </div>
 
       {/* ข้อความ */}
       <AnimatePresence>
@@ -269,6 +275,7 @@ export default function Home() {
             className="absolute bottom-28 text-xl font-semibold text-pink-200 drop-shadow-lg z-30"
           >
             {message}
+            
           </motion.div>
         )}
       </AnimatePresence>
@@ -284,5 +291,6 @@ export default function Home() {
         onClick={handleWhaleClick}
       />
     </div>
+    
   );
 }

@@ -66,7 +66,7 @@ export default function NextPage() {
 
   return (
     <div
-      className="relative min-h-screen w-screen flex flex-col items-center justify-center bg-no-repeat bg-center overflow-hidden text-center font-sans"
+      className="relative min-h-screen w-screen flex flex-col items-center justify-start bg-no-repeat bg-center overflow-hidden text-center font-sans"
       style={{
         backgroundImage: "url('/bg1.png')",
         backgroundColor: "#ffffcc",
@@ -138,9 +138,11 @@ export default function NextPage() {
       </div>
 
       {/* ข้อความ */}
-      <p className="text-white/90 mb-10 text-lg font-medium relative z-10">
+      <p className="text-white/90 text-lg font-medium relative z-10 top-70">
         ขอบคุณสำหรับทุกๆอย่างนะ <br />
-        นี่คงเป็นของขวัญชิ้นสุดท้ายที่เค้าจะมอบให้เทอ
+        นี่คงเป็นของขวัญชิ้นสุดท้ายที่เค้าจะมอบให้เทอ<br />
+        รักเทอจัง❤️ แม้ในวันนี้เทอจะไม่รักเค้าแล้วก็ตาม<br />
+        อยากให้เทออยู่ข้างๆในวันนี้จัง 21-11-68<br />
       </p>
     </div>
   );

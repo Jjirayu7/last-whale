@@ -23,8 +23,26 @@ export default function MusicPage() {
   { id: 4, name: "เพลงนี้ให้เอิลล", youtube: "WtcKJtwMD2E", playlist: "RDWtcKJtwMD2E" },
   { id: 5, name: "เพลงนี้ให้อ้วน", youtube: "Gbtg204DP88", playlist: "RDGbtg204DP88" },
   { id: 6, name: "เพลงนี้ให้นะ", youtube: "5JPGMJjioqs", playlist: "RD5JPGMJjioqs" },
+  { id: 7, name: "ให้โบ้ฟังตอนเศร้า", youtube: "jhhPA9GHDg4" },
+  { id: 8, name: "ให้โบ้ฟังตอนมีความสุข", youtube: "D-aCb9xsqTE" },
+  { id: 9, name: "ให้โบ้ฟังตอนทมีความสุขมาก", youtube: "q_Eq9V0F9g0" },
+  { id:10, name: "ให้โบ้ฟังตอนมีความสุขมากๆๆ", youtube: "Y2E71oe0aSM" },
+  { id: 11, name: "ให้โบ้ฟังหายเศร้า", youtube: "6Q5xqNkCk7w", playlist: "RD6Q5xqNkCk7w" },
+  { id: 12, name: "ให้โบ้ฟังตอนทอ่านหนังสือ", youtube: "ks7p6DA0dKk", playlist: "PLaTZbioq5bqCJY_-eLK7jWWdD7Ds3Vg99" },
+  { id: 13, name: "ให้ลัคกี้อีกเพลง", youtube: "iO8ouMrxFM8", playlist: "RDiO8ouMrxFM8" },
 ];
 
+const playNextSong = () => {
+  const currentIndex = songs.findIndex(s => s.id === currentSong.id);
+  const nextIndex = (currentIndex + 1) % songs.length; // วนกลับเพลงแรก
+  const nextSong = songs[nextIndex];
+
+  setCurrentSong(nextSong);
+  playerRef.current.loadVideoById(nextSong.youtube);
+  playerRef.current.setVolume(volume);
+  playerRef.current.playVideo();
+  setIsPlaying(true);
+};
 
 
 
@@ -54,19 +72,25 @@ export default function MusicPage() {
             e.target.playVideo();
           },
           onStateChange: (e: any) => {
-            if (e.data === window.YT.PlayerState.PLAYING) {
-                setIsPlaying(true);
-            }
+          if (e.data === window.YT.PlayerState.PLAYING) {
+            setIsPlaying(true);
+          }
 
-            if (e.data === window.YT.PlayerState.PAUSED) {
-                setIsPlaying(false);
-            }
+          if (e.data === window.YT.PlayerState.PAUSED) {
+            setIsPlaying(false);
+          }
 
-            if (e.data === window.YT.PlayerState.ENDED && isLoop) {
-                playerRef.current.playVideo();
-            }
-            },
+          // 🔥 ถ้ามี loop ให้เล่นเพลงเดิม
+          if (e.data === window.YT.PlayerState.ENDED && isLoop) {
+            playerRef.current.playVideo();
+            return;
+          }
 
+          // 🎵 ถ้าเพลงจบและไม่ loop → เล่นเพลงถัดไป
+          if (e.data === window.YT.PlayerState.ENDED && !isLoop) {
+            playNextSong();
+          }
+        }
         },
       });
     };
@@ -155,11 +179,15 @@ export default function MusicPage() {
       >
         เพลงของเรา 🎵
       </motion.h2>
-
-      <div className="bg-white/20 backdrop-blur-xl p-6 rounded-xl border border-white/40 shadow-lg text-white mb-6"
-      style={{ zIndex: 1000 }}
+      <div
+        className="
+          bg-white/20 backdrop-blur-xl p-6 rounded-xl border border-white/40 shadow-lg text-white mb-6
+          max-h-120 overflow-y-auto
+        "
+         style={{ zIndex: 1000 }}
       >
         <div className="flex flex-col space-y-2 w-64">
+
           {songs.map((s) => (
             <button
               key={s.id}
