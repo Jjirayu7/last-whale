@@ -80,7 +80,7 @@ export default function PinPage() {
           {pin.map((d, i) => (
             <motion.input
               key={i}
-              ref={(el) => (inputsRef.current[i] = el)}
+              ref={(el) => { inputsRef.current[i] = el; }}
               type="password"
               maxLength={1}
               value={d}
