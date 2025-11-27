@@ -76,20 +76,20 @@ export default function PinPage() {
         </h2>
 
         {/* ช่องกรอก PIN */}
-        <div className="flex space-x-3 mb-6">
-          {pin.map((d, i) => (
-            <motion.input
-              key={i}
-              ref={(el) => { inputsRef.current[i] = el; }}
-              type="password"
-              maxLength={1}
-              value={d}
-              onChange={(e) => handlePinChange(e.target.value, i)}
-              className="w-11 h-11 text-center text-2xl rounded-xl bg-white/10 text-blue-900 font-bold focus:outline-none focus:ring-4 focus:ring-sky-400 shadow-md"
-              whileFocus={{ scale: 1.1 }}
-            />
-          ))}
-        </div>
+<div className="flex space-x-3 mb-6">
+  {pin.map((d, i) => (
+    <motion.div
+      key={i}
+      className={`w-11 h-11 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-2xl font-bold shadow-md ${
+        wrong ? "border-2 border-red-400" : "border border-white/30"
+      }`}
+      whileHover={{ scale: 1.05 }}
+    >
+      {d ? "•" : ""}
+    </motion.div>
+  ))}
+</div>
+
 
         {/* แสดงข้อความเมื่อรหัสผิด */}
         <AnimatePresence>
