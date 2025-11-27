@@ -33,7 +33,7 @@ const handleDateClick = (day: number) => {
 
   if (!rawUrl) {
     toast.error(`🌸 ไม่มีวิดีโอสำหรับวันที่ ${day}/${month}/${year}`, {
-      description: "ลองเลือกวันอื่นดูน้า 💫",
+      description: "ลองเลือกวันอื่นดูนะลัคกี้ 💫",
       style: {
         background: "rgba(255,255,255,0.8)",
         backdropFilter: "blur(8px)",
@@ -47,7 +47,6 @@ const handleDateClick = (day: number) => {
     return;
   }
 
-  // ✅ แปลงลิงก์ให้เป็น embed เสมอ
   let embedUrl = rawUrl;
   if (rawUrl.includes("youtu.be/")) {
     const id = rawUrl.split("youtu.be/")[1].split("?")[0];
@@ -60,7 +59,7 @@ const handleDateClick = (day: number) => {
   setSelectedVideo(embedUrl);
   setShowVideo(false);
 
-  toast.success("✨ เจอวิดีโอแล้ว! คลิก ▶️ เพื่อดูได้เลย 💙", {
+  toast.success("✨ เจอวิดีโอแล้วววโบ้วว กด ▶️ ได้เลยนะ 💙", {
     duration: 2500,
     style: {
       background: "rgba(240,248,255,0.9)",
