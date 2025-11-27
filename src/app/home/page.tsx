@@ -19,8 +19,10 @@ export default function Home() {
 // 🎬 วิดีโอตามวันที่
 const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
 const [showVideo, setShowVideo] = useState(false);
+const [selectedDay, setSelectedDay] = useState<number | null>(null);
 
 const handleDateClick = (day: number) => {
+  setSelectedDay(day);
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth() + 1;
   const formatted = `${year}_${String(month).padStart(2, "0")}_${String(day).padStart(2, "0")}`;
@@ -241,9 +243,11 @@ const handleDateClick = (day: number) => {
                 <button
                   key={i}
                   onClick={() => handleDateClick(d.day)}
-                  className={`text-center py-0.5 rounded-full ${
+                  className={`text-center py-1 rounded-full transition-all duration-200 ${
                     d.isToday
                       ? "bg-blue-300 text-white font-bold"
+                      : d.day === selectedDay
+                      ? "bg-blue-400/70 text-white font-bold shadow-[0_0_8px_rgba(59,130,246,0.8)] scale-105"
                       : d.is14th
                       ? "bg-pink-400 text-white font-bold"
                       : "hover:bg-white/20"
@@ -255,44 +259,45 @@ const handleDateClick = (day: number) => {
                 <div key={i}></div>
               )
             )}
+
           </div>
         </motion.div>
         {/* 🎥 ปุ่มเล่นและแสดงวิดีโอ */}
-{selectedVideo && !showVideo && (
-  <motion.button
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    transition={{ duration: 0.6 }}
-    onClick={() => setShowVideo(true)}
-    className="mt-4 bg-blue-400/70 hover:bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md backdrop-blur-sm"
-  >
-    ▶️ เล่นวิดีโอ
-  </motion.button>
-)}
+      {selectedVideo && !showVideo && (
+        <motion.button
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6 }}
+          onClick={() => setShowVideo(true)}
+          className="mt-4 bg-blue-400/70 hover:bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md backdrop-blur-sm"
+        >
+          ▶️ เล่นวิดีโอ
+        </motion.button>
+      )}
 
-{showVideo && selectedVideo && (
-  <motion.div
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    transition={{ duration: 0.8 }}
-    className="mt-4 relative w-[90vw] max-w-2xl aspect-video rounded-xl overflow-hidden shadow-lg border border-white/40"
-  >
-    <button
-      onClick={() => setShowVideo(false)}
-      className="absolute top-2 right-2 bg-white/70 hover:bg-white text-sky-900 font-bold rounded-full w-8 h-8 flex items-center justify-center z-50"
-    >
-      ✕
-    </button>
-    <iframe
-      src={selectedVideo}
-      title="YouTube Video"
-      width="100%"
-      height="100%"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowFullScreen
-    />
-  </motion.div>
-)}
+      {showVideo && selectedVideo && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8 }}
+          className="mt-4 relative w-[90vw] max-w-2xl aspect-video rounded-xl overflow-hidden shadow-lg border border-white/40"
+        >
+          <button
+            onClick={() => setShowVideo(false)}
+            className="absolute top-2 right-2 bg-white/70 hover:bg-white text-sky-900 font-bold rounded-full w-8 h-8 flex items-center justify-center z-50"
+          >
+            ✕
+          </button>
+          <iframe
+            src={selectedVideo}
+            title="YouTube Video"
+            width="100%"
+            height="100%"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </motion.div>
+      )}
       </div>
 
       {/* ปุ่มเปลี่ยนหน้า */}
