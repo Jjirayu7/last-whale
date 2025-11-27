@@ -3,6 +3,8 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useMemo, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { Toaster, toast } from "sonner";
+
 
 export default function Home() {
   const router = useRouter();
@@ -13,6 +15,64 @@ export default function Home() {
   const [currentTime, setCurrentTime] = useState<string>("");
   const [currentDate, setCurrentDate] = useState(new Date());
   const [popCount, setPopCount] = useState(0);
+
+// 🎬 วิดีโอตามวันที่
+const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
+const [showVideo, setShowVideo] = useState(false);
+
+const handleDateClick = (day: number) => {
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth() + 1;
+  const formatted = `${year}_${String(month).padStart(2, "0")}_${String(day).padStart(2, "0")}`;
+
+  const videoMap: Record<string, string> = {
+    "2025_11_27": "https://www.youtube.com/embed/n5OoVaS8OZs?autoplay=1&mute=0",
+  };
+
+  const rawUrl = videoMap[formatted];
+
+  if (!rawUrl) {
+    toast.error(`🌸 ไม่มีวิดีโอสำหรับวันที่ ${day}/${month}/${year}`, {
+      description: "ลองเลือกวันอื่นดูน้า 💫",
+      style: {
+        background: "rgba(255,255,255,0.8)",
+        backdropFilter: "blur(8px)",
+        borderRadius: "10px",
+        color: "#1e3a8a",
+        fontWeight: 500,
+      },
+    });
+    setSelectedVideo(null);
+    setShowVideo(false);
+    return;
+  }
+
+  // ✅ แปลงลิงก์ให้เป็น embed เสมอ
+  let embedUrl = rawUrl;
+  if (rawUrl.includes("youtu.be/")) {
+    const id = rawUrl.split("youtu.be/")[1].split("?")[0];
+    embedUrl = `https://www.youtube.com/embed/${id}`;
+  } else if (rawUrl.includes("watch?v=")) {
+    const id = rawUrl.split("watch?v=")[1].split("&")[0];
+    embedUrl = `https://www.youtube.com/embed/${id}`;
+  }
+
+  setSelectedVideo(embedUrl);
+  setShowVideo(false);
+
+  toast.success("✨ เจอวิดีโอแล้ว! คลิก ▶️ เพื่อดูได้เลย 💙", {
+    duration: 2500,
+    style: {
+      background: "rgba(240,248,255,0.9)",
+      borderRadius: "10px",
+      color: "#2563eb",
+      fontWeight: 600,
+      backdropFilter: "blur(10px)",
+    },
+  });
+};
+
+
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
@@ -21,7 +81,6 @@ export default function Home() {
     audioRef.current.volume = 0.5;
   }, []);
 
-  // ⏰ เวลา
   useEffect(() => {
     if (!isClient) return;
     const updateTime = () => {
@@ -113,10 +172,8 @@ export default function Home() {
     }
   };
 
-  // 🧱 Loading state
   if (!isClient) return null;
 
-  // ✅ เมื่อผ่านรหัสแล้ว
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden text-center font-sans">
       <motion.div
@@ -151,7 +208,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.2, duration: 0.8 }}
-          className="bg-white/20 backdrop-blur-md rounded-xl px-4 p-2 mt-2 shadow-md border border-white/40 text-blue-300 scale-90"
+          className="bg-white/20 backdrop-blur-md rounded-xl px-4 p-2 mt-2 shadow-md border border-white/40 text-blue-300 scale-100"
         >
           <div className="flex justify-between items-center mb-1">
             <button
@@ -182,8 +239,9 @@ export default function Home() {
             ))}
             {calendarDays.map((d, i) =>
               d ? (
-                <div
+                <button
                   key={i}
+                  onClick={() => handleDateClick(d.day)}
                   className={`text-center py-0.5 rounded-full ${
                     d.isToday
                       ? "bg-blue-300 text-white font-bold"
@@ -193,13 +251,49 @@ export default function Home() {
                   }`}
                 >
                   {d.day}
-                </div>
+                </button>
               ) : (
                 <div key={i}></div>
               )
             )}
           </div>
         </motion.div>
+        {/* 🎥 ปุ่มเล่นและแสดงวิดีโอ */}
+{selectedVideo && !showVideo && (
+  <motion.button
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 0.6 }}
+    onClick={() => setShowVideo(true)}
+    className="mt-4 bg-blue-400/70 hover:bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md backdrop-blur-sm"
+  >
+    ▶️ เล่นวิดีโอ
+  </motion.button>
+)}
+
+{showVideo && selectedVideo && (
+  <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 0.8 }}
+    className="mt-4 relative w-[90vw] max-w-2xl aspect-video rounded-xl overflow-hidden shadow-lg border border-white/40"
+  >
+    <button
+      onClick={() => setShowVideo(false)}
+      className="absolute top-2 right-2 bg-white/70 hover:bg-white text-sky-900 font-bold rounded-full w-8 h-8 flex items-center justify-center z-50"
+    >
+      ✕
+    </button>
+    <iframe
+      src={selectedVideo}
+      title="YouTube Video"
+      width="100%"
+      height="100%"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen
+    />
+  </motion.div>
+)}
       </div>
 
       {/* ปุ่มเปลี่ยนหน้า */}
@@ -290,6 +384,7 @@ export default function Home() {
         whileTap={{ scale: 0.85, rotate: -5 }}
         onClick={handleWhaleClick}
       />
+      <Toaster position="top-center" richColors expand={true} />
     </div>
     
   );
